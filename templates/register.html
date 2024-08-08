@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <style>
+        /* Global Styles */
+        body {
+          font-family: Arial, sans-serif;
+          margin: 0;
+          padding: 0;
+          background-color: rgb(91, 121, 91);
+        }
+
+        /* Header Styles */
+        header {
+          background-color: #333;
+          color: #fff;
+          padding: 20px;
+          text-align: center;
+        }
+
+        h1 {
+          margin: 0;
+        }
+
+        /* Form Styles */
+        .registration-form {
+          max-width: 500px;
+          margin: 40px auto;
+          padding: 30px;
+          background-color: #fff;
+          border-radius: 5px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .registration-form label {
+          display: block;
+          margin-bottom: 10px;
+          font-weight: bold;
+        }
+
+        .registration-form input,
+        .registration-form select {
+          width: 100%;
+          padding: 10px;
+          border: 1px solid #ccc;
+          border-radius: 3px;
+          font-size: 16px;
+          margin-bottom: 20px;
+        }
+
+        .registration-form button {
+          background-color: #333;
+          color: #fff;
+          border: none;
+          padding: 10px 20px;
+          font-size: 16px;
+          border-radius: 3px;
+          cursor: pointer;
+        }
+
+        .registration-form button:hover {
+          background-color:red;
+        }
+
+        /* Student Details Styles */
+        .student-details {
+          max-width: 800px;
+          margin: 40px auto;
+          padding: 30px;
+          background-color: pink;
+          border-radius: 5px;
+          box-shadow: 0 0 10px rgba(3, 1, 2, 0.1);
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-between;
+        }
+
+        .student-card {
+          width: 47%;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          padding: 20px;
+          margin-bottom: 20px;
+          display: flex;
+          align-items: center;
+        }
+
+        .student-card h2 {
+          margin-top: 0;
+        }
+
+        .student-card p {
+          margin: 10px 0;
+        }
+
+        .student-card img {
+          max-width: 200px;
+          height: auto;
+          border-radius: 5px;
+          margin-left: 20px;
+        }
+
+        /* Message Styles */
+        .messages {
+          list-style-type: none;
+          padding: 0;
+          margin: 20px 0;
+        }
+
+        .messages li {
+          background-color: #e6f2ff;
+          border-left: 5px solid #007bff;
+          padding: 10px 20px;
+          margin-bottom: 10px;
+        }
+
+        .messages li.success {
+          background-color: #e6ffee;
+          border-left-color: #28a745;
+        }
+
+        .messages li.error {
+          background-color: #ffebe6;
+          border-left-color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Registration Form</h1>
+    </header>
+
+    <div class="registration-form">
+        <form id="registration-form" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+            <br>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <br>
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender" required>
+                <option value="">Select gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+            </select>
+            <br>
+            <label for="age">Age:</label>
+            <input type="number" id="age" name="age" min="1" max="150" required>
+            <br>
+            <label for="profile_picture">Profile Picture:</label>
+            <input type="file" id="profile_picture" name="profile_picture" accept="image/*">
+            <br>
+            <button type="submit">Register</button>
+        </form>
+    </div>
+
+    <div class="student-details">
+        {% if students %}
+        {% for student in students %}
+        <div class="student-card">
+            <div>
+                <h2>Registered Student Details:</h2>
+                <p>Name: {{ student.name }}</p>
+                <p>Email: {{ student.email }}</p>
+                <p>Gender: {{ student.gender }}</p>
+                <p>Age: {{ student.age }}</p>
+            </div>
+            {% if student.profile_picture %}
+            <img src="{{ student.profile_picture.url }}" alt="{{ student.name }}'s profile image">
+            {% else %}
+            <p>No profile picture available.</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+        {% else %}
+        <p>No student information available.</p>
+        {% endif %}
+    </div>
+
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</body>
+</html>
